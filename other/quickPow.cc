@@ -14,7 +14,7 @@ double myPow(double x, long long n) {
     double res = 1.0;
     for(; n; n >>= 1, x *= x)
     {
-        (n & 1) && (res *= x);
+        (n & 1) && (res *= x);  // 等价于if(n & 1) res *= x;
     }
     return res;
 }
