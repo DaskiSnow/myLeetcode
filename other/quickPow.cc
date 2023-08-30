@@ -8,14 +8,15 @@ int qpow(int x, int n)
     int res = 1;
     for(; n; n >>= 1, x *= x)
     {
-        res *= x;
+        (n & 1) && (res *= x);  // 相当于if(n & 1) res *= x;
     }
     return res;
 }
 
+
 int main(int argc, char *argv[])
 {
-    cout << qpow(5, 3) << endl;
+    cout << qpow(2, 10) << endl;
     return 0;
 }
 
