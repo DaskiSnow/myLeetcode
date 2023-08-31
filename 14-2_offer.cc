@@ -5,35 +5,25 @@ using namespace std;
 class Solution 
 {
 public:
-    // n >= 2
-    unsigned long long cuttingRope(unsigned long long n) 
+    // 因为涉及大数求余, 尝试使用加速幂求余法, 因此要转换方法为贪心算法(3的n次幂对1e9+7取余)
+    long long cuttingRope(long long n) 
     {
-        int tempPower = n / 3;
-        int lastLen = n % 3;
-        if(lastLen == 0) return remainder(3, tempPower, 1000000007);
-        if(lastLen == 1) return ( remainder(3, tempPower - 1, 1000000007) * 4 ) % 1000000007;
-        if(lastLen == 2) return ( remainder(3, tempPower, 1000000007) * 2 ) % 1000000007;
-    }
-    
-    unsigned long long remainder(int baseNumber, int power, int rhs)
-    {
-        int rem = 1;
-        while(power > 1)
+        if(n <= 3) return n - 1;
+        long long quotient = n / 3;
+        long long remainder = n - quotient * 3;
+        (remainder == 1) && (quotient -= 1, remainder = 4);
+        
+        // 以下算法的本质：加速幂求余
+        long long res = 1;
+        long long x = 3;
+        long long divisor = 1000000007;
+        for(; quotient; quotient >>= 1, x = x * x % divisor)
         {
-            if(power % 2 == 0) 
-            {
-                // power为偶数
-                rem = rem * rem % rhs;
-                
-            }
-            else
-            {
-                // power为奇数
-                rem = baseNumber * (rem * rem % rhs) % rhs;
-                power = power - 1;
-            }
-            power /= 2;
+            (quotient & 1) && (res = res * x % divisor);
         }
+        (remainder != 0) && (res = res * remainder % divisor);
+
+        return res;
     }
 };
 
